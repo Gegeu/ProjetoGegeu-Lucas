@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 
 import './App.css';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <div className="App">
-
-    </div>
+    <>
+      <Navbar/>
+    </>
   );
 }
 

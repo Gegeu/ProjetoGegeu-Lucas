@@ -152,7 +152,7 @@ const EnhancedTableToolbar = props => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle">
-          Produtos
+          Pedidos
         </Typography>
       )}
 
@@ -195,7 +195,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Produtos() {
+export default function Pedidos() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');

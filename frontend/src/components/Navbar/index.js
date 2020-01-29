@@ -1,21 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
-function Navbar() {
-    return (     
-         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link className="navbar-brand" to="/">Início</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div className="navbar-nav">
-            <Link className="navbar-brand" to="/produtos">Produtos</Link>
-            <Link className="navbar-brand" to="/pedidos">Pedidos</Link>
-        </div>
-        </div>
-    </nav>
-    )
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  link: {
+      textDecoration: 'none',
+      paddingLeft: 10,
+      color: 'white',
+  }
+}));
+
+export default function Navbar() {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            <Link className={classes.link} to="/">Dashboard</Link>
+            <Link className={classes.link} to="/Pedidos">Pedidos</Link>
+            <Link className={classes.link} to="/Produtos">Produtos</Link>
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
-
-export default Navbar;
