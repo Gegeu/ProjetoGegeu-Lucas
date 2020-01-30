@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect }from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -16,19 +17,18 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import AddBox from '@material-ui/icons/AddBox';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { Button, Modal } from 'react-bootstrap';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 function createData(cliente, produto, quantidade, data_pedido, data_entrega, status) {
   return { cliente, produto, quantidade, data_pedido, data_entrega, status };
 }
 
-const rows = [
-  createData('Gegeu', 'Maconha boa', 55, '28/02/2020', '30/02/2020', 'Pagamento Pendente'),
-  createData('Lucas lindo', 'Ostia para igreja', 55, '28/02/2020', '30/02/2020', 'Pagamento Pendente'),
-];
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,6 +53,15 @@ function stableSort(array, cmp) {
 function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
+const produtos = [
+  { id : 1, label : 'Produto 1'},
+  { id : 2, label : 'Produto 2'},
+  { id : 3, label : 'Produto 3'},
+  { id : 4, label : 'Produto 4'},
+  { id : 5, label : 'Produto 5'},
+  { id : 6, label : 'Produto 6'},
+  { id : 7, label : 'Produto 7'},
+];
 
 const headCells = [
   { id: 'cliente', numeric: false, disablePadding: true, label: 'Cliente' },
@@ -134,11 +143,56 @@ const useToolbarStyles = makeStyles(theme => ({
   title: {
     flex: '1 1 100%',
   },
+  modalBody : {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  modalItem: {
+    marginTop: 20,
+  }
 }));
 
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, addPed } = props;
+  const [produto, setProduto] = useState();
+  const [show, setShow] = useState(false);
+  
+  const data_atual = () => {
+    const data = new Date(),
+        dia  = data.getDate().toString(),
+        diaF = (dia.length == 1) ? '0'+dia : dia,
+        mes  = (data.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+        mesF = (mes.length == 1) ? '0'+mes : mes,
+        anoF = data.getFullYear();
+    return diaF+"/"+mesF+"/"+anoF;
+  }
+  let pedido;
+  const getPedido = () => {
+    pedido = {
+      'cliente' : document.querySelector('#cliente').value,
+      'produto' : produtos.filter(produto => {
+        if (document.querySelector("#produto").value == produto.id)
+          return true;
+        return false;
+      }),
+      'quantidade' : document.querySelector('#quantidade').value,
+      'data_pedido' : data_atual(),
+      'data_entrega' : document.querySelector('#data').value,
+    }
+    handleClose();
+    console.log(pedido);
+    return pedido;
+  }
+
+  const handleChangeSelect = event => {
+    setProduto(event.target.value);
+  }
+
+  const handleClose = () => {
+    setShow(false);
+  }
+  const handleShow = () => setShow(true);
 
   return (
     <Toolbar
@@ -157,18 +211,55 @@ const EnhancedTableToolbar = props => {
       )}
 
       {
+        <Tooltip title="Novo pedido">
+          <IconButton aria-label="add" onClick={ handleShow }>
+            <AddBox />
+          </IconButton>
+        </Tooltip>
+
+      }
+      {
         <Tooltip title="Excluir">
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       }
+      <Modal show={show} centered={true} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cadastro</Modal.Title>
+        </Modal.Header>
+        <Modal.Body dialogas='div' className={classes.modalBody}> 
+          <InputLabel htmlFor=""></InputLabel>
+          <OutlinedInput id="cliente" name="cliente" placeholder="Nome do Cliente" type="text" variant="outlined" required className={classes.modalItem}/>
+          <OutlinedInput id="data" name="data" placeholder="xx/xx/xxxx" type="date" required className={classes.modalItem}/>
+          <FormControl variant="outlined" className={[classes.formControl, classes.modalItem].join(" ")}>
+            <InputLabel htmlFor="produto">Produto</InputLabel>
+            <Select native value={ produto } inputProps={{ name:"produto", id:"produto"}} onChange={handleChangeSelect}>
+            { produtos.map(produto => (
+              <option key={produto.id} value={produto.id}>{produto.label}</option>
+            ))}
+            </Select>
+          </FormControl>
+          <OutlinedInput id="quantidade" name="quantidade" type="text" placeholder="Quantidade" required className={classes.modalItem}/>
+        </Modal.Body>
+        <Modal.Footer>
+          
+          <Button variant="secondary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={ () => addPed(getPedido())}>
+            Salvar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  addPed : PropTypes.func.isRequired,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -192,7 +283,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: 20,
     width: 1,
-  },
+  }
 }));
 
 export default function Pedidos() {
@@ -201,8 +292,8 @@ export default function Pedidos() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -235,7 +326,6 @@ export default function Pedidos() {
         selected.slice(selectedIndex + 1),
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -248,25 +338,25 @@ export default function Pedidos() {
     setPage(0);
   };
 
-  const handleChangeDense = event => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = name => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const addPedido = (pedido) => {
+
+    setRows([...rows, pedido]);
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} addPed={addPedido}/>
         <TableContainer>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
             aria-label="enhanced table"
-          >
+            >
             <EnhancedTableHead
               classes={classes}
               numSelected={selected.length}
@@ -275,34 +365,34 @@ export default function Pedidos() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
-            />
+              />
             <TableBody>
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.cliente);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  
                   return (
                     <TableRow
-                      hover
-                      onClick={event => handleClick(event, row.cliente)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.cliente}
-                      selected={isItemSelected}
+                    hover
+                    onClick={event => handleClick(event, row.cliente)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.cliente}
+                    selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
-                        />
+                          />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.cliente}
                       </TableCell>
-                      <TableCell align="center">{row.produto}</TableCell>
+                      <TableCell align="center">{row.produto[0].label}</TableCell>
                       <TableCell align="center">{row.quantidade}</TableCell>
                       <TableCell align="center">{row.data_pedido}</TableCell>
                       <TableCell align="center">{row.data_entrega}</TableCell>
@@ -311,7 +401,7 @@ export default function Pedidos() {
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -326,9 +416,9 @@ export default function Pedidos() {
           page={page}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
-            labelRowsPerPage='Linhas por página'
-
-        />
+          labelRowsPerPage='Linhas por página'
+          
+          />
       </Paper>
     </div>
   );
