@@ -40,7 +40,7 @@ export default function Navbar() {
             <Link className={classes.link} to="/Pedidos">Pedidos</Link>
             <Link className={classes.link} to="/Produtos">Produtos</Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Link className={classes.link} to="/Login" color="inherit">Logout</Link>
         </Toolbar>
       </AppBar>
     </div>

@@ -324,6 +324,7 @@ export default function Pedidos() {
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
+          
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
             labelRowsPerPage='Linhas por página'
