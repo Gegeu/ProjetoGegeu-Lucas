@@ -1,0 +1,57 @@
+.pedidos {
+    margin: 0 auto;
+    margin-top: 10px;
+    border-radius: 1%;
+    border-bottom: 1px solid #a1a0a0;
+    width: 99%;
+    height: 500px;
+}
+
+.header-table {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.header-name {
+    margin-left: 15px;
+}
+
+.header-icons {
+    display: flex;
+    align-items: baseline;
+}
+.material-icons {
+    margin-right: 35px;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.pedidos-table {
+    width: 100%;
+    height: 500px;
+
+}
+
+.content-table {
+    margin: 20px auto;
+    width: 95%;
+}
+
+.content-title .content-cell td{
+    text-align: center;
+    font-size: 20px;
+    border-bottom: 1px solid #a1a0a0;
+}
+
+.content-body .content-cell td {
+    text-align: center;
+    padding-top: 35px;
+    border-bottom: 1px solid #c4c0c0;
+    
+}
+
+/* .content-table .content-body tr {
+    padding-left: 20px;
+    padding-top: 50px;
+} */
