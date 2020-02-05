@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -36,11 +36,11 @@ export default function Navbar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            <Link className={classes.link} to="/">Dashboard</Link>
+            <Link className={classes.link} to="/Dashboard">Dashboard</Link>
             <Link className={classes.link} to="/Pedidos">Pedidos</Link>
             <Link className={classes.link} to="/Produtos">Produtos</Link>
           </Typography>
-          <Link className={classes.link} to="/Login" color="inherit">Logout</Link>
+          <Link className={classes.link} to="/" color="inherit">Logout</Link>
         </Toolbar>
       </AppBar>
     </div>
