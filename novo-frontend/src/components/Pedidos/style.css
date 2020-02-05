@@ -51,7 +51,18 @@
     
 }
 
-/* .content-table .content-body tr {
-    padding-left: 20px;
-    padding-top: 50px;
-} */
+.modal-form {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.modal-form label {
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.modal-form input, .modal-form label {
+    flex:1 300px;
+    
+}
