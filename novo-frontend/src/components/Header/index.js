@@ -10,7 +10,6 @@ function Header() {
             <ul>
               <li><Link className="header-link" to="/">Dashboard</Link></li>
               <li><Link className="header-link" to="/">Pedidos</Link></li>
-              <li><Link className="header-link" to="/">Produtos</Link></li>
             </ul>
           </nav>
           <div>

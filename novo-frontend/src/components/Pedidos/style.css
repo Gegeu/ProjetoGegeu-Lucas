@@ -4,7 +4,7 @@
     border-radius: 1%;
     border-bottom: 1px solid #a1a0a0;
     width: 99%;
-    height: 500px;
+    min-height: 500px;
 }
 
 .header-table {
@@ -27,6 +27,15 @@
     cursor: pointer;
 }
 
+#done {
+    margin-left: 5px;
+    font-size: 20px;
+    vertical-align: baseline;
+}
+
+.content-cell td {
+    vertical-align: baseline;
+}
 .pedidos-table {
     width: 100%;
     height: 500px;
@@ -46,7 +55,7 @@
 
 .content-body .content-cell td {
     text-align: center;
-    padding-top: 35px;
+    padding: 35px;
     border-bottom: 1px solid #c4c0c0;
     
 }
